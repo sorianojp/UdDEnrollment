@@ -23,6 +23,9 @@ class EnrollmentController extends Controller
             'stud_type' => 'required',
             'program_id' => 'required'
         ]);
+        if (!$student->hasPaidEnrollmentFee()) {
+            return back()->withErrors(['msg' => 'Student must pay the enrollment fee before enrolling.']);
+        }
         $student->enrollments()->create($request->all());
         return redirect()->route('students.enrollments.index', $student)
                         ->with('status','Enrollment added successfully.');

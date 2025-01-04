@@ -9,7 +9,7 @@
             <x-auth-session-status :status="session('status')" />
             <x-auth-validation-errors />
             <div class="flex space-x-4">
-                <x-card class="w-1/2">
+                <x-card class="w-2/5">
                     <h1 class="uppercase mb-2 font-bold text-xl">Register</h1>
                     <form action="{{ route('students.store') }}" method="POST">
                         @csrf
@@ -34,7 +34,7 @@
                         </div>
                     </form>
                 </x-card>
-                <x-card class="w-1/2">
+                <x-card class="w-3/5">
                     <h1 class="uppercase mb-2 font-bold text-xl">Registered Students</h1>
                     <div class="relative overflow-x-auto sm:rounded-lg">
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
@@ -43,7 +43,7 @@
                                     <th scope="col" class="px-6 py-3">No</th>
                                     <th scope="col" class="px-6 py-3">Name</th>
                                     <th scope="col" class="px-6 py-3">Student No</th>
-                                    <th scope="col" class="px-6 py-3">Enrollment</th>
+                                    <th scope="col" class="px-6 py-3">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -53,10 +53,20 @@
                                         <td class="px-6 py-4">{{ $student->full_name }}</td>
                                         <td class="px-6 py-4">{{ $student->student_no }}</td>
                                         <td class="px-6 py-4">
-                                            <a href="{{ route('students.enrollments.index', $student) }}">
-                                                <x-primary-button type="button">Enrollment</x-primary-button>
+                                            @if ($student->hasPaidEnrollmentFee())
+                                                <a href="{{ route('students.enrollments.index', $student) }}">
+                                                    <x-primary-button type="button">Enrollment</x-primary-button>
+                                                </a>
+                                            @else
+                                                <x-secondary-button type="button"
+                                                    disabled>Enrollment</x-secondary-button>
+                                            @endif
+
+                                            <a href="{{ route('students.payments.create', $student) }}">
+                                                <x-primary-button type="button">Make Payment</x-primary-button>
                                             </a>
                                         </td>
+
                                     </tr>
                                 @endforeach
                             </tbody>

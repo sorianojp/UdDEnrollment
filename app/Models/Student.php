@@ -22,4 +22,15 @@ class Student extends Model
     {
         return $this->hasMany(Enrollment::class);
     }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function hasPaidEnrollmentFee()
+    {
+        return $this->payments()->where('payment_description_id', 2)->exists();
+    }
+
 }
